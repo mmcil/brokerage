@@ -36,7 +36,9 @@ public class SecurityConfig {
                         .anyRequest().permitAll()
                 )
                 .httpBasic(httpBasic -> httpBasic.realmName("Brokerage API")) // Basic auth for admin
-                .headers(headers -> headers.frameOptions().disable()); // Allow H2 console frames
+                .headers(headers -> headers
+                        .frameOptions(frameOptions -> frameOptions.disable()) // Allow H2 console frames (new syntax)
+                );
 
         return http.build();
     }
