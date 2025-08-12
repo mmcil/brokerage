@@ -1,0 +1,106 @@
+spring:
+  application:
+    name: brokerage-trading-system
+
+  profiles:
+    active: dev
+
+  datasource:
+    url: jdbc:h2:mem:tradingdb
+    driver-class-name: org.h2.Driver
+    username: sa
+    password: password
+
+  h2:
+    console:
+      enabled: true
+      path: /h2-console
+
+  jpa:
+    hibernate:
+      ddl-auto: none  # Let schema.sql handle table creation
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+        dialect: org.hibernate.dialect.H2Dialect
+
+  sql:
+    init:
+      mode: always
+      schema-locations: classpath:schema.sql
+      data-locations: classpath:data.sql
+
+  security:
+    user:
+      name: admin
+      password: admin123
+      roles: ADMIN
+
+# Management endpoints
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics
+  endpoint:
+    health:
+      show-details: always
+
+# Logging
+logging:
+  level:
+    firm.brokerage: DEBUG
+    org.springframework.security: DEBUG
+    org.hibernate.SQL: DEBUG
+  pattern:
+    console: "%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n"
+
+---
+# Development Profile
+spring:
+  config:
+    activate:
+      on-profile: dev
+  jpa:
+    show-sql: true
+  h2:
+    console:
+      enabled: true
+
+---
+# Production Profile
+spring:
+  config:
+    activate:
+      on-profile: prod
+  jpa:
+    show-sql: false
+    hibernate:
+      ddl-auto: validate
+  h2:
+    console:
+      enabled: false
+  datasource:
+    url: ${DATABASE_URL:jdbc:h2:file:./data/tradingdb}
+
+logging:
+  level:
+    firm.brokerage: INFO
+    org.springframework.security: WARN
+
+---
+# Test Profile
+spring:
+  config:
+    activate:
+      on-profile: test
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+    show-sql: false
+  datasource:
+    url: jdbc:h2:mem:testdb
+  sql:
+    init:
+      mode: never  # Don't run SQL scripts in tests
