@@ -31,11 +31,11 @@ spring:
       schema-locations: classpath:schema.sql
       data-locations: classpath:data.sql
 
-  security:
-    user:
-      name: admin
-      password: admin123
-      roles: ADMIN
+#  security:
+#    user:
+#      name: admin
+#      password: admin123
+#      roles: ADMIN
 
 # Management endpoints
 management:
@@ -52,6 +52,8 @@ logging:
   level:
     firm.brokerage: DEBUG
     org.springframework.security: DEBUG
+    org.springframework.security.authentication: DEBUG
+    org.springframework.security.web: DEBUG
     org.hibernate.SQL: DEBUG
   pattern:
     console: "%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n"
