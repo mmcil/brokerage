@@ -14,22 +14,31 @@ import java.util.Optional;
 @Repository
 public interface AssetRepository extends JpaRepository<AssetEntity, AssetId> {
 
-    // Find all assets for a customer
+    /**
+     * Find all assets for a customer
+     */
     List<AssetEntity> findByCustomerId(String customerId);
 
-    // Find specific asset for a customer
+    /**
+     * Find specific asset for a customer
+     */
     Optional<AssetEntity> findByCustomerIdAndAssetName(String customerId, String assetName);
 
-    // Check if customer has TRY asset with sufficient amount
-    @Query("SELECT CASE WHEN a.usableSize >= :requiredAmount THEN true ELSE false END " +
-            "FROM AssetEntity a WHERE a.customerId = :customerId AND a.assetName = 'TRY'")
-    Optional<Boolean> hasSufficientTryAmount(@Param("customerId") String customerId,
-                                             @Param("requiredAmount") BigDecimal requiredAmount);
+    /**
+     * Find all customers who have a specific asset
+     */
+    List<AssetEntity> findByAssetName(String assetName);
 
-    // Check if customer has specific asset with sufficient amount
-    @Query("SELECT CASE WHEN a.usableSize >= :requiredAmount THEN true ELSE false END " +
-            "FROM AssetEntity a WHERE a.customerId = :customerId AND a.assetName = :assetName")
-    Optional<Boolean> hasSufficientAssetAmount(@Param("customerId") String customerId,
-                                               @Param("assetName") String assetName,
-                                               @Param("requiredAmount") BigDecimal requiredAmount);
+    /**
+     * Find assets with usable size greater than or equal to specified amount
+     */
+    @Query("SELECT a FROM AssetEntity a WHERE a.customerId = :customerId AND a.usableSize >= :minUsableSize")
+    List<AssetEntity> findByCustomerIdAndUsableSizeGreaterThanEqual(
+            @Param("customerId") String customerId,
+            @Param("minUsableSize") BigDecimal minUsableSize);
+
+    /**
+     * Delete all assets for a customer (useful for testing)
+     */
+    void deleteByCustomerId(String customerId);
 }
