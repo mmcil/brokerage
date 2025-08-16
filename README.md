@@ -14,7 +14,7 @@ Layered Architecture (Traditional Spring Boot MVC with Rich Entities)
 - **Time to Market:** Faster development  
 - **Complexity:** No need for complex modeling
 
-  Hexagonal Architecture is not selected due to these reasons in this particular small study.
+  Hexagonal (Ports & Adapters) Architecture is not selected due to these reasons in this particular small study.
 
 ---
 
